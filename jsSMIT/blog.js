@@ -49,7 +49,7 @@ const renderData = async () => {
   data.forEach((post) => {
     const cardItem = document.createElement("div");
     cardItem.className =
-      "xl:w-2/4 py-3 px-5 md:w-full card card-side bg-base-100 shadow-xl m-10";
+      "xl:w-3/4 h-1/10 py-3 px-5 md:w-full card card-side bg-base-100 shadow-xl m-10";
 
     cardItem.innerHTML = `
       <div class="card-body">
@@ -59,7 +59,7 @@ const renderData = async () => {
         <div class="flex justify-between">
           <p>${displayName}</p>
           <p>${email}</p>
-          <p>01-JAN-2023</p>
+          <p>${post.date}</p>
         </div>
       </div>
       <figure>
@@ -82,12 +82,12 @@ const onAuthStateChangedFunc = () => {
   auth.onAuthStateChanged((user) => {
     if (user) {
       // User is signed in
-      uid = user.uid;
+      // uid = user.uid;
       email = user.email;
       displayName = user.displayName;
       photoURL = user.photoURL;
 
-      console.log("User ID:", uid);
+      // console.log("User ID:", uid);
       console.log("Email:", email);
       console.log("Display Name:", displayName);
       console.log("Photo URL:", photoURL);

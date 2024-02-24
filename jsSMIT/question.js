@@ -81,6 +81,7 @@ const getContentFun = () => {
 };
 let user;
 let currentDate;
+
 const onAuthStateChangedFunc = () => {
   return new Promise((resolve) => {
     auth.onAuthStateChanged((authUser) => {
@@ -91,8 +92,7 @@ const onAuthStateChangedFunc = () => {
         const email = authUser.email;
         const displayName = authUser.displayName;
         const photoURL = authUser.photoURL;
-        currentDate = new Date().toLocaleDateString();
-
+        currentDate = formatDate(new Date());
         console.log("User ID:", uid);
         console.log("Email:", email);
         console.log("Display Name:", displayName);
@@ -121,7 +121,7 @@ const addPostData = async () => {
       }
       return op.attributes;
     });
-   
+
     const postsCollection = collection(db, "posts");
     try {
       const docRef = await addDoc(postsCollection, {
@@ -130,7 +130,7 @@ const addPostData = async () => {
         userEmail: user.email,
         userName: user.displayName,
         userProfile: user.photoURL,
-        date: currentDate.toISOString(),
+        date: currentDate,
       });
 
       console.log("Document written with ID: ", docRef.id);
@@ -140,7 +140,7 @@ const addPostData = async () => {
   } else {
     console.error("User not authenticated");
   }
-  console.log("Date:", currentDate.toISOString());
+  console.log("Date:", currentDate);
 };
 
 writeBtn.addEventListener("click", function () {
@@ -152,3 +152,19 @@ writeBtn.addEventListener("click", function () {
   console.log(titleValue);
   addPostData();
 });
+function formatDate(date = new Date()) {
+  const year = date.toLocaleString('default', {year: 'numeric'});
+  const month = date.toLocaleString('default', {
+    month: '2-digit',
+  });
+  const day = date.toLocaleString('default', {day: '2-digit'});
+
+  return [year, month, day].join('-');
+}
+
+// 👇️ 2023-07-26 (YYYY-MM-DD)
+console.log(formatDate(new Date()));
+
+//  👇️️ 2025-05-09 (YYYY-MM-DD)
+console.log(formatDate(new Date(2025, 4, 9)));
+
