@@ -1,0 +1,61 @@
+* {
+}
+body {
+  width: 100vw;
+  height: 250vh;
+  background: #ffff;
+}
+.messageContainer {
+  overflow: scroll;
+  height: 100vh;
+  padding: 10px;
+}
+#alreadySignUp {
+  text-align: center;
+}
+.customCard {
+  width: 70%;
+}
+
+.cardContainer {
+  width: 70%;
+  height: 250px;
+  background-color: red;
+}
+
+.imageContainer {
+  object-fit: contain;
+  width: 100px;
+  height: 100px;
+}
+
+#editorOnly {
+  border: 0;
+}
+
+#article {
+  margin: 5vw 10vw;
+}
+
+#textarea{
+  width: 100%;
+  height: 100px;
+  border: 0;
+  border-radius: 10px;
+  padding: 10px;
+  font-size: 20px !important;
+  margin-top: 10px;
+}
+#btnSubmitDiscussion{
+  width: 100%;
+  height: 50px;
+  border: 0;
+  border-radius: 10px;
+  padding: 10px;
+  margin-top: 10px;
+  font-size: 20px!important;
+}
+#replyBlogPost{
+  margin: 5vw ;
+}
+ 

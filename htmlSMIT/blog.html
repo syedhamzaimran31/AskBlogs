@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <link
+      href="https://cdn.jsdelivr.net/npm/daisyui@4.6.0/dist/full.min.css"
+      rel="stylesheet"
+      type="text/css"
+    />
+    <link rel="stylesheet" href="../stylesSMIT/style.css" />
+  </head>
+  <body>
+    <!-- Navbar -->
+    <div class="navbar bg-base-100">
+      <div class="flex-1">
+        <a class="btn btn-ghost text-xl">AskHubBlog</a>
+      </div>
+      <div class="flex-none gap-2">
+        <button
+          id=""
+          onclick="window.location.href = 'write.html'"
+          class="inline-block cursor-pointer rounded-md bg-gray-800 px-4 py-3 text-center text-sm text-white transition duration-200 ease-in-out hover:bg-gray-900"
+        >
+          Ask Or Write
+        </button>
+
+        <div class="form-control">
+          <input
+            type="text"
+            placeholder="Search"
+            class="input input-bordered w-24 md:w-auto"
+          />
+        </div>
+        <div class="dropdown dropdown-end">
+          <div
+            tabindex="0"
+            role="button"
+            class="btn btn-ghost btn-circle avatar"
+          >
+            <div class="w-10 rounded-full">
+              <img
+                id="profileImage"
+                alt="Tailwind CSS Navbar component"
+                src="https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_960_720.png"
+              />
+            </div>
+          </div>
+          <ul
+            tabindex="0"
+            class="mt-3 z-[1] p-2 shadow menu menu-sm dropdown-content bg-base-100 rounded-box w-52"
+          >
+            <li>
+              <a class="justify-between">
+                Profile
+                <span class="badge">New</span>
+              </a>
+            </li>
+            <li><a>Settings</a></li>
+            <li id="logoutBtn"><a>Logout</a></li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <!-- <ul id="postList"></ul> -->
+    <script type="module" src="../jsSMIT/blog.js"></script>
+    <script src="https://cdn.tailwindcss.com"></script>
+  </body>
+</html>

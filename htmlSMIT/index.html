@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link
+      href="https://cdn.jsdelivr.net/npm/daisyui@4.6.1/dist/full.min.css"
+      rel="stylesheet"
+      type="text/css"
+    />
+    <link rel="stylesheet" href="../stylesSMIT/style.css" />
+
+    <title>AskHubStack</title>
+  </head>
+  <body>
+    <div
+      class="relative flex flex-col items-center justify-center h-screen overflow-hidden"
+    >
+      <div
+        class="w-full p-6 bg-white border-t-4 border-gray-600 rounded-md shadow-md border-top lg:max-w-lg"
+      >
+        <h1 class="text-3xl font-semibold text-center text-gray-700">
+          Chat Pat
+        </h1>
+        <form class="space-y-4">
+          <div>
+            <label class="label">
+              <span class="text-base label-text">Email</span>
+            </label>
+            <input
+              id="signInEmail"
+              type="text"
+              placeholder="Email Address"
+              class="w-full input input-bordered"
+            />
+          </div>
+          <div>
+            <label class="label">
+              <span class="text-base label-text">Password</span>
+            </label>
+            <input
+              id="signInPassword"
+              type="password"
+              placeholder="Enter Password"
+              class="w-full input input-bordered"
+            />
+          </div>
+          <a
+            id="forgetPassword"
+            href="#"
+            class="text-xs text-gray-600 hover:underline hover:text-blue-600"
+            >Forget Password?</a
+          >
+          <div>
+            <button id="btnSignIn" type="button" class="btn btn-block">
+              Login
+            </button>
+          </div>
+          <div>
+            <button id="btnSignInGoogle" type="button" class="btn btn-block">
+              Login with Google
+            </button>
+          </div>
+          <a
+            id="createAccount"
+            href="#"
+            class="text-xs text-gray-600 hover:underline hover:text-blue-600"
+            >Create an Account</a
+          >
+        </form>
+      </div>
+    </div>
+    <script type="module" src="../jsSMIT/app.js"></script>
+    <script src="https://cdn.tailwindcss.com"></script>
+  </body>
+</html>
