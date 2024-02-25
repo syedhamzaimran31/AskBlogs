@@ -30,15 +30,12 @@ const auth = getAuth(app);
 
 const logoutBtn = document.getElementById("logoutBtn");
 document.addEventListener("DOMContentLoaded", () => {
-  // Retrieve the selected post data from localStorage
   const selectedPost = JSON.parse(localStorage.getItem("selectedPost"));
 
-  // Check if selectedPost is not null or undefined
   if (selectedPost) {
-    // Access the properties of the selected post
     const title = selectedPost.title;
     const description = selectedPost.description;
-    const displayName = selectedPost.userName; // Make sure to update this if the property name is different
+    const displayName = selectedPost.userName; 
     const email = selectedPost.email;
     const date = selectedPost.date;
 

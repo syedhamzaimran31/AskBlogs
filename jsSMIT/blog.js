@@ -48,7 +48,7 @@ const fetchData = async () => {
 };
 
 fetchData().then((data) => {
-  console.log(data); // Log the retrieved data
+  console.log(data); 
 });
 
 const renderData = async () => {
