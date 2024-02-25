@@ -10,14 +10,14 @@ import {
   orderBy,
   limit,
   addDoc,
-  updateDoc,
-  deleteDoc,
-  where,
-  getDocs,
 } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
 import {
   getAuth,
   onAuthStateChanged,
+  GoogleAuthProvider,
+  signInWithPopup,
+  signOut,
+  createUserWithEmailAndPassword,
 } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
 
 const firebaseConfig = {
@@ -40,7 +40,7 @@ const showQuillText = document.getElementById("showQuillText");
 const showQuillTextValue = showQuillText.innerHTML;
 
 const writeBtn = document.getElementById("writeBtn");
-
+const logoutBtn = document.getElementById("logoutBtn");
 var quill = new Quill("#editor", {
   theme: "snow",
   modules: {
@@ -97,15 +97,26 @@ const onAuthStateChangedFunc = () => {
         console.log("Email:", email);
         console.log("Display Name:", displayName);
         console.log("Photo URL:", photoURL);
-        resolve();
+        resolve(true);
       } else {
         // User is signed out
         console.log("No user signed in");
-        resolve();
+        resolve(false);
       }
     });
   });
 };
+const checkSignInStatus = async () => {
+  const isUserSignedIn = await onAuthStateChangedFunc();
+  if (isUserSignedIn) {
+    alert("User is eligible for Post");
+  } else {
+    // User is signed out, redirect to login.html
+    alert("User is not signed in");
+    window.location.href = "index.html";
+  }
+};
+checkSignInStatus();
 
 const addPostData = async () => {
   await onAuthStateChangedFunc();
@@ -134,6 +145,8 @@ const addPostData = async () => {
       });
 
       console.log("Document written with ID: ", docRef.id);
+      alert("Your Post has been successfully Posted");
+      window.location.href = "blog.html";
     } catch (e) {
       console.error("Error adding document: ", e);
     }
@@ -141,6 +154,16 @@ const addPostData = async () => {
     console.error("User not authenticated");
   }
   console.log("Date:", currentDate);
+};
+const signOutGoogle = () => {
+  signOut(auth)
+    .then(() => {
+      console.log("signOut Successful");
+      window.location.href = "blog.html";
+    })
+    .catch((error) => {
+      console.log("signOut Failed");
+    });
 };
 
 writeBtn.addEventListener("click", function () {
@@ -153,13 +176,13 @@ writeBtn.addEventListener("click", function () {
   addPostData();
 });
 function formatDate(date = new Date()) {
-  const year = date.toLocaleString('default', {year: 'numeric'});
-  const month = date.toLocaleString('default', {
-    month: '2-digit',
+  const year = date.toLocaleString("default", { year: "numeric" });
+  const month = date.toLocaleString("default", {
+    month: "2-digit",
   });
-  const day = date.toLocaleString('default', {day: '2-digit'});
+  const day = date.toLocaleString("default", { day: "2-digit" });
 
-  return [year, month, day].join('-');
+  return [year, month, day].join("-");
 }
 
 // 👇️ 2023-07-26 (YYYY-MM-DD)
@@ -168,3 +191,4 @@ console.log(formatDate(new Date()));
 //  👇️️ 2025-05-09 (YYYY-MM-DD)
 console.log(formatDate(new Date(2025, 4, 9)));
 
+logoutBtn && logoutBtn.addEventListener("click", signOutGoogle);

@@ -1,9 +1,12 @@
 * {
 }
 body {
+  
   width: 100vw;
-  height: 250vh;
-  background: #ffff;
+  height: 100vh; 
+  background: #fff; 
+  margin: 0; 
+  
 }
 .messageContainer {
   overflow: scroll;
@@ -57,5 +60,9 @@ body {
 }
 #replyBlogPost{
   margin: 5vw ;
+}
+
+#postList{
+  background-color: #fff;
 }
  

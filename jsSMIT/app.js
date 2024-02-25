@@ -92,7 +92,7 @@ const signInFunction = () => {
       .then((userCredential) => {
         const user = userCredential.user;
         console.log(user);
-        window.location.href = "question.html";
+        window.location.href = "blog.html";
       })
       .catch((error) => {
         const errorCode = error.code;
@@ -108,8 +108,8 @@ const onLoad = () => {
     if (user) {
       //   emailText && (emailText.innerText = ` ${user.email}`);
       console.log(user.email);
-      if (currentPageName !== "" && currentPageName !== "question.html") {
-        window.location.href = "question.html";
+      if (currentPageName !== "" && currentPageName !== "blog.html") {
+        window.location.href = "blog.html";
       }
     }
   });

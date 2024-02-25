@@ -6,9 +6,14 @@ import {
   getFirestore,
   collection,
   getDocs,
+  query, 
+  orderBy
 } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
 
-import { getAuth } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
+import {
+  getAuth,
+  signOut,
+} from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
 
 const firebaseConfig = {
   apiKey: "AIzaSyAmaGAvbx8I6baJgPhPkgOMkSaOa5gHWvE",
@@ -20,6 +25,9 @@ const firebaseConfig = {
   measurementId: "G-KSP3EX4XGT",
 };
 
+const logoutBtn = document.getElementById("logoutBtn");
+const createBlogBtn=document.getElementById("createBlogButton")
+
 const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
 const auth = getAuth(app);
@@ -27,9 +35,10 @@ const auth = getAuth(app);
 // displayData.js
 
 const fetchData = async () => {
+  
   const postsCollection = collection(db, "posts");
-  const querySnapshot = await getDocs(postsCollection);
-
+  const postsQuery = query(postsCollection, orderBy('date', 'desc'));
+  const querySnapshot = await getDocs(postsQuery);
   const postsData = [];
   querySnapshot.forEach((doc) => {
     postsData.push({ id: doc.id, ...doc.data() });
@@ -51,14 +60,16 @@ const renderData = async () => {
     cardItem.className =
       "xl:w-3/4 h-1/10 py-3 px-5 md:w-full card card-side bg-base-100 shadow-xl m-10";
 
+    cardItem.style.cursor = "pointer";
+
     cardItem.innerHTML = `
       <div class="card-body">
         <h2 class="card-title">${post.title}</h2>
         <p>${post.description}</p>
 
         <div class="flex justify-between">
-          <p>${displayName}</p>
-          <p>${email}</p>
+          <p>${post.userName}</p>
+          <p>${post.userEmail}</p>
           <p>${post.date}</p>
         </div>
       </div>
@@ -79,10 +90,19 @@ const renderData = async () => {
 
 const user = auth.currentUser;
 // const uid = user.uid;
-let email ;
+let email;
 let displayName;
-let photoURL ;
+let photoURL;
 
+const signOutGoogle = () => {
+  signOut(auth)
+    .then(() => {
+      console.log("signOut Successful");
+    })
+    .catch((error) => {
+      console.log("signOut Failed");
+    });
+};
 const onAuthStateChangedFunc = () => {
   auth.onAuthStateChanged((user) => {
     if (user) {
@@ -101,5 +121,9 @@ const onAuthStateChangedFunc = () => {
     }
   });
 };
+logoutBtn.addEventListener("click", signOutGoogle);
+createBlogBtn.addEventListener("click", () => {
+  window.location.href = "question.html";
+});
 onAuthStateChangedFunc();
 renderData();
