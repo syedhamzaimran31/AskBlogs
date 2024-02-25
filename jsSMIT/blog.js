@@ -68,6 +68,11 @@ const renderData = async () => {
       </div>
     `;
 
+    cardItem.addEventListener("click", () => {
+      localStorage.setItem("selectedPost", JSON.stringify(post));
+      window.location.href = "discussion.html";
+    });
+
     postList.appendChild(cardItem);
   });
 };
