@@ -8,11 +8,13 @@ import {
   getDocs,
   query,
   orderBy,
+  where, 
 } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
 
 import {
   getAuth,
   signOut,
+  onAuthStateChanged,
 } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
 
 const firebaseConfig = {
@@ -35,7 +37,7 @@ document.addEventListener("DOMContentLoaded", () => {
   if (selectedPost) {
     const title = selectedPost.title;
     const description = selectedPost.description;
-    const displayName = selectedPost.userName; 
+    const displayName = selectedPost.userName; // Make sure to update this if the property name is different
     const email = selectedPost.email;
     const date = selectedPost.date;
 
@@ -80,6 +82,11 @@ document.addEventListener("DOMContentLoaded", () => {
   } else {
     console.error("No post data found in localStorage");
   }
+
+  onAuthStateChanged(auth, (user) => {
+    const { displayName, email, profileUrl } = user;
+  });
+
   const btnSubmitDiscussion = document.getElementById("btnSubmitDiscussion");
   btnSubmitDiscussion.addEventListener("click", async () => {
     const replyTextarea = document.getElementById("textarea");
@@ -91,25 +98,61 @@ document.addEventListener("DOMContentLoaded", () => {
 
       replyTextarea.value = "";
 
-      renderData();
+      const updatedRepliesData = await fetchRepliesData(postId);
+      renderReplies(updatedRepliesData);
     }
   });
 
   const addReplyToFirestore = async (postId, reply) => {
     try {
-      const db = getFirestore(app);
-      const repliesCollection = collection(db, "replies");
-      await addDoc(repliesCollection, {
-        postId,
-        reply,
-        timestamp: serverTimestamp(),
-      });
-      console.log("Reply added to Firestore successfully");
+      const user = auth.currentUser;
+      if (user) {
+        const { displayName, email, photoURL } = user;
+        const repliesCollection = collection(db, "replies");
+        await addDoc(repliesCollection, {
+          postId,
+          userName: user.displayName,
+          userEmail: user.email,
+          userProfile: user.photoURL,
+          reply,
+          timestamp: serverTimestamp(),
+        });
+        console.log("Reply added to Firestore successfully");
+      } else {
+        console.log("User is not authenticated");
+      }
     } catch (error) {
       console.error("Error adding reply to Firestore:", error);
     }
   };
+
+  const fetchRepliesData = async (postId) => {
+    const repliesCollection = collection(db, "replies");
+    const postRepliesQuery = query(
+      repliesCollection,
+      where("postId", "==", postId),
+      orderBy("timestamp", "asc")
+    );
+    const querySnapshot = await getDocs(postRepliesQuery);
+    const repliesData = [];
+    querySnapshot.forEach((doc) => {
+      repliesData.push({ id: doc.id, ...doc.data() });
+    });
+    return repliesData;
+  };
+
+  const renderReplies = (repliesData) => {
+    const repliesContainer = document.getElementById("repliesContainer");
+    repliesContainer.innerHTML = "";
+
+    repliesData.forEach((reply) => {
+      const replyItem = document.createElement("div");
+      replyItem.textContent = reply.reply;
+      repliesContainer.appendChild(replyItem);
+    });
+  };
 });
+
 const signOutGoogle = () => {
   signOut(auth)
     .then(() => {
