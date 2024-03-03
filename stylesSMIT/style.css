@@ -1,13 +1,25 @@
 * {
 }
 body {
-  
   width: 100vw;
-  height: 100vh; 
-  background: #fff; 
-  margin: 0; 
-  
+  height: 100vh;
+  background: #fff;
+  margin: 0;
 }
+#showQuillText {
+  height: 0vh;
+  background: #fff;
+}
+#postContentDetails {
+  margin-bottom: 100px;
+  background: #fff;
+}
+.formMainContainer {
+  overflow: scroll;
+  height: 100vh;
+  background: #fff;
+}
+
 .messageContainer {
   overflow: scroll;
   height: 100vh;
@@ -40,7 +52,7 @@ body {
   margin: 5vw 10vw;
 }
 
-#textarea{
+#textarea {
   width: 100%;
   height: 100px;
   border: 0;
@@ -49,20 +61,19 @@ body {
   font-size: 20px !important;
   margin-top: 10px;
 }
-#btnSubmitDiscussion{
+#btnSubmitDiscussion {
   width: 100%;
   height: 50px;
   border: 0;
   border-radius: 10px;
   padding: 10px;
   margin-top: 10px;
-  font-size: 20px!important;
+  font-size: 20px !important;
 }
-#replyBlogPost{
-  margin: 5vw ;
+#replyBlogPost {
+  margin: 5vw;
 }
 
-#postList{
+#postList {
   background-color: #fff;
 }
- 

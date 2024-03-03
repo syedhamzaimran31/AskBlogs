@@ -8,7 +8,7 @@ import {
   getDocs,
   query,
   orderBy,
-  where, 
+  where,
 } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
 
 import {
@@ -31,17 +31,26 @@ const db = getFirestore(app);
 const auth = getAuth(app);
 
 const logoutBtn = document.getElementById("logoutBtn");
-document.addEventListener("DOMContentLoaded", () => {
+const emailReply = document.getElementById("emailReply");
+const dateReply = document.getElementById("dateReply");
+const contentReply = document.getElementById("contentReply");
+const repliesContainer = document.getElementById("repliesContainer");
+let updatedRepliesData;
+document.addEventListener("DOMContentLoaded", async () => {
   const selectedPost = JSON.parse(localStorage.getItem("selectedPost"));
 
   if (selectedPost) {
+    // userEmail = auth.currentUser ? auth.currentUser.email : null;
+    // await fetchRepliesData(selectedPost.id);
+
     const title = selectedPost.title;
     const description = selectedPost.description;
     const displayName = selectedPost.userName; // Make sure to update this if the property name is different
-    const email = selectedPost.email;
+    const email_post = selectedPost.email;
     const date = selectedPost.date;
 
     const postItem = document.createElement("div");
+    postItem.id = "postContentDetails";
     postItem.innerHTML = `<div id="article">
       <div id="blogPost">
         <article class="prose">
@@ -89,17 +98,18 @@ document.addEventListener("DOMContentLoaded", () => {
 
   const btnSubmitDiscussion = document.getElementById("btnSubmitDiscussion");
   btnSubmitDiscussion.addEventListener("click", async () => {
+   
+
     const replyTextarea = document.getElementById("textarea");
     const replyContent = replyTextarea.value.trim();
 
     if (replyContent !== "") {
       const postId = selectedPost.id;
+      const userEmail = auth.currentUser.email;
       await addReplyToFirestore(postId, replyContent);
 
       replyTextarea.value = "";
-
-      const updatedRepliesData = await fetchRepliesData(postId);
-      renderReplies(updatedRepliesData);
+      
     }
   });
 
@@ -111,9 +121,9 @@ document.addEventListener("DOMContentLoaded", () => {
         const repliesCollection = collection(db, "replies");
         await addDoc(repliesCollection, {
           postId,
-          userName: user.displayName,
-          userEmail: user.email,
-          userProfile: user.photoURL,
+          userName: displayName,
+          userEmail: email,
+          userProfile: photoURL,
           reply,
           timestamp: serverTimestamp(),
         });
@@ -125,7 +135,7 @@ document.addEventListener("DOMContentLoaded", () => {
       console.error("Error adding reply to Firestore:", error);
     }
   };
-
+  
   const fetchRepliesData = async (postId) => {
     const repliesCollection = collection(db, "replies");
     const postRepliesQuery = query(
@@ -138,20 +148,46 @@ document.addEventListener("DOMContentLoaded", () => {
     querySnapshot.forEach((doc) => {
       repliesData.push({ id: doc.id, ...doc.data() });
     });
+    console.log(repliesData);
+    renderReplies(repliesData);
     return repliesData;
   };
+  const postId = selectedPost.id;
+  const userEmail = auth.currentUser ? auth.currentUser.email : null;
+  fetchRepliesData(postId);
 
-  const renderReplies = (repliesData) => {
-    const repliesContainer = document.getElementById("repliesContainer");
-    repliesContainer.innerHTML = "";
-
-    repliesData.forEach((reply) => {
-      const replyItem = document.createElement("div");
-      replyItem.textContent = reply.reply;
-      repliesContainer.appendChild(replyItem);
-    });
-  };
 });
+
+const renderReplies = async (repliesData) => {
+  console.log("Replied.......");
+  const postContentDetails = document.getElementById("postContentDetails");
+  repliesData.forEach((reply) => {
+    const replyUser = reply.userName;
+    const replyDate = reply.timestamp.toDate(); // Convert Firestore timestamp to Date object
+    const replyContent = reply.reply;
+    const replyUserProfile = reply.userProfile;
+
+    const replyItem = document.createElement("div");
+  
+      replyItem.innerHTML = `<div class="chat chat-start">
+      <div class="chat-image avatar">
+        <div class="w-10 rounded-full">
+          <img alt="Tailwind CSS chat bubble component" src="${replyUserProfile}" />
+        </div>
+      </div>
+      <div class="chat-header">
+        ${replyUser}
+        <time class="text-xs opacity-50">${replyDate}</time>
+      </div>
+      <div class="chat-bubble">${replyContent}</div>
+      <div class="chat-footer opacity-50">
+        Delivered
+      </div>
+    </div>`;
+    repliesContainer.insertBefore(replyItem,postContentDetails );
+      // repliesContainer.appendChild(replyItem);
+  });
+};
 
 const signOutGoogle = () => {
   signOut(auth)
