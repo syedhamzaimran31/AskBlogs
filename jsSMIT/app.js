@@ -128,4 +128,4 @@ alreadySignUp &&
 signUpBtn && signUpBtn.addEventListener("click", signUpFunctions);
 
 signInBtn && signInBtn.addEventListener("click", signInFunction);
-// onLoad();
+onLoad();
