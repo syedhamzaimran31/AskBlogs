@@ -184,7 +184,6 @@ const renderReplies = async (repliesData) => {
         Delivered
       </div>
     </div>`;
-    // repliesContainer.insertBefore(replyItem,postContentDetails );
       repliesContainer.appendChild(replyItem);
   });
 };
